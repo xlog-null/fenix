@@ -40,6 +40,7 @@ import org.mozilla.fenix.helpers.TestHelper.packageName
 import org.mozilla.fenix.helpers.TestHelper.scrollToElementByText
 import org.mozilla.fenix.helpers.assertIsEnabled
 import org.mozilla.fenix.helpers.click
+import org.mozilla.fenix.helpers.isVisibleForUser
 import org.mozilla.fenix.ui.robots.SettingsRobot.Companion.DEFAULT_APPS_SETTINGS_ACTION
 
 /**
@@ -474,17 +475,18 @@ private fun assertAboutHeading(): ViewInteraction {
 }
 
 private fun assertRateOnGooglePlay(): ViewInteraction {
-    onView(withId(R.id.recycler_view))
-        .perform(RecyclerViewActions.scrollTo<RecyclerView.ViewHolder>(hasDescendant(withText("Rate on Google Play"))))
+    scrollToElementByText("Rate on Google Play")
     return onView(withText("Rate on Google Play"))
         .check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
 }
 
 private fun assertAboutFirefoxPreview(): ViewInteraction {
+    val aboutFirefox = onView(withText("About $appName"))
     scrollToElementByText("About $appName")
-    settingsList().swipeUp(2)
-    return onView(withText("About $appName"))
-        .check(matches(isDisplayed()))
+    if(!aboutFirefox.isVisibleForUser()) {
+        settingsList().swipeUp(2)
+    }
+    return aboutFirefox.check(matches(isCompletelyDisplayed()))
 }
 
 fun swipeToBottom() = onView(withId(R.id.recycler_view)).perform(ViewActions.swipeUp())
