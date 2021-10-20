@@ -478,8 +478,7 @@ private fun assertRateOnGooglePlay(): ViewInteraction {
 }
 
 private fun assertAboutFirefoxPreview(): ViewInteraction {
-    onView(withId(R.id.recycler_view))
-        .perform(RecyclerViewActions.scrollTo<RecyclerView.ViewHolder>(hasDescendant(withText("About $appName"))))
+    scrollToElementByText("About $appName")
     return onView(withText("About $appName"))
         .check(matches(isDisplayed()))
 }
