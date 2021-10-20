@@ -27,6 +27,8 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.By.textContains
 import androidx.test.uiautomator.UiDevice
+import androidx.test.uiautomator.UiScrollable
+import androidx.test.uiautomator.UiSelector
 import androidx.test.uiautomator.Until
 import org.hamcrest.CoreMatchers
 import org.mozilla.fenix.R
@@ -34,6 +36,7 @@ import org.mozilla.fenix.helpers.Constants.PackageName.GOOGLE_PLAY_SERVICES
 import org.mozilla.fenix.helpers.TestAssetHelper.waitingTime
 import org.mozilla.fenix.helpers.TestHelper.appName
 import org.mozilla.fenix.helpers.TestHelper.isPackageInstalled
+import org.mozilla.fenix.helpers.TestHelper.packageName
 import org.mozilla.fenix.helpers.TestHelper.scrollToElementByText
 import org.mozilla.fenix.helpers.assertIsEnabled
 import org.mozilla.fenix.helpers.click
@@ -479,6 +482,7 @@ private fun assertRateOnGooglePlay(): ViewInteraction {
 
 private fun assertAboutFirefoxPreview(): ViewInteraction {
     scrollToElementByText("About $appName")
+    settingsList().swipeUp(2)
     return onView(withText("About $appName"))
         .check(matches(isDisplayed()))
 }
@@ -501,3 +505,6 @@ private fun addonsManagerButton() = onView(withText(R.string.preferences_addons)
 
 private fun goBackButton() =
     onView(CoreMatchers.allOf(ViewMatchers.withContentDescription("Navigate up")))
+
+private fun settingsList() =
+    UiScrollable(UiSelector().resourceId("$packageName:id/recycler_view"))
